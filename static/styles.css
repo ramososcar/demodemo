@@ -1,0 +1,225 @@
+/* Ajustes generales */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+    color: #3d3d3d;
+    font-size: 24px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Para permitir flexibilidad en dispositivos móviles */
+}
+
+.input-container input {
+    margin-right: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Para mejorar la usabilidad en dispositivos pequeños */
+    max-width: 270px; /* Limita el ancho en pantallas grandes */
+}
+
+.btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    margin-top: 10px; /* Mejora el espacio en dispositivos móviles */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #c7e796;
+    color: #3d3d3d;
+}
+
+.btn-secondary {
+    background-color: #d4af8f;
+    color: #3d3d3d;
+}
+
+.btn-export {
+    background-color: #e76a63;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid grey;
+}
+
+th {
+    background-color: #5a3921;
+    color: white;
+}
+
+td input[type="text"] {
+    width: 100%;
+    padding: 5px;
+}
+
+.btn-link {
+    background-color: #c7e796;
+    color: #3d3d3d;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-copy {
+    background-color: #e76a63;
+    color: white;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Mejora de accesibilidad */
+input:focus, button:focus {
+    outline: 2px solid #5a3921; /* Resalta el foco en inputs y botones */
+}
+
+#panel-configuracion {
+    width: 300px; /* Ajusta el ancho según prefieras */
+    margin: 0 auto; /* Esto centra el panel horizontalmente */
+    text-align: left; /* Esto asegura que el texto esté alineado a la izquierda */
+}
+
+/* Estilos responsivos para pantallas pequeñas */
+@media only screen and (max-width: 600px) {
+    .input-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-container input {
+        margin-bottom: 10px;
+        width: 100%; /* Los inputs ocuparán el ancho completo */
+    }
+
+    .btn {
+        width: 100%; /* Botones ocuparán todo el ancho disponible */
+    }
+
+    table {
+        width: 100%;
+        font-size: .9em;
+    }
+
+    table tr{
+        display: flex;
+        flex-direction: column;
+        border: 1px solid grey;
+        padding: 1em;
+    }
+
+    table thead{
+        display: none;
+    }
+
+    table td,
+    table th{
+        border:none;
+    }
+
+    table td[data-titulo]{
+        display: flex;
+    }
+
+    table td[data-titulo]::before{
+        content: attr (data-titulo);
+        width: 90px;
+        color:#5a3921;
+        font-weight: bold;
+    }
+
+
+
+
+
+
+
+    /*
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 10px; 
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        margin-bottom: 10px;
+    }
+
+    table td {
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    HACER EL RESPONSIVE CON ESTE TUTORIAL
+    https://www.youtube.com/watch?v=I5cub9PxobU&t=1207s
+    */
+} 
+
+/* Mejora de accesibilidad y usabilidad */
+input:invalid {
+    border-color: red;
+}
+
+button:hover:enabled {
+    background-color: #d35400;
+}
+
+button:disabled {
+    background-color: #ccc;
+}
+
+
+

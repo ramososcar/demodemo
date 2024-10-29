@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gestión de Eventos</title>
+        <!-- Estilos -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+
+    <body>
+        <!-- Título principal -->
+        <h1>Gestión de Eventos</h1>
+
+            <!-- Contenedor de la tarjeta personalizada -->
+            <div class="tarjeta-container">
+                <div id="tarjeta-container"></div>
+            </div>
+
+            <!-- Panel de configuración -->
+            <div id="panel-configuracion">
+                <h2>Panel de Configuración</h2>
+
+                <!-- Controles de color y tipografía -->
+                <label for="color-h1">Color del Título H1:</label>
+                <input type="color" id="color-h1"><br>
+
+                <label for="color-p">Color del Párrafo:</label>
+                <input type="color" id="color-p"><br>
+
+                <label for="color-a">Color del Enlace:</label>
+                <input type="color" id="color-a"><br>
+
+                <label for="bg-color">Color del Fondo:</label>
+                <input type="color" id="bg-color"><br>
+
+                <label for="font-family">Tipografía:</label>
+                <select id="font-family">
+                    <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="'Courier New', Courier, monospace">Courier New</option>
+                </select>
+
+                <!-- Mensaje que mostrará los parámetros copiados -->
+                <p id="mensaje-copiado" class="visibility: hidden"></p> 
+                </div>
+                <!-- Controles para carga de archivo y acciones en la tabla -->
+                <div class="input-container">
+                    <label for="uploadFile">Archivo de Excel</label>
+                    <input type="file" id="uploadFile" accept=".xls,.xlsx" aria-label="Seleccionar archivo de Excel" />
+                    
+                    <label for="googleSite">Link de Google Site</label>
+                    <input type="text" id="googleSite" placeholder="Agrega el link del Google Site" required aria-label="Campo de link de Google Site" />
+
+                    <!-- Botones para cargar archivo, borrar lista y exportar -->
+                    <button class="btn btn-primary" id="btnUpload" onclick="uploadFile()">Cargar Excel</button>
+                    <button class="btn btn-secondary" id="btnClear" onclick="clearList()">Borrar Lista</button>
+                    <button class="btn btn-export" id="btnExport" onclick="exportList()" disabled>Exportar</button>
+                </div>
+
+                <!-- Tabla para mostrar datos de eventos -->
+                <table id="eventTable">
+                    <thead>
+                        <tr>
+                            <th>Nombres</th>
+                            <th>Pases</th>
+                            <th>Frase</th>
+                            <th>Link de Google Site</th>
+                            <th>Link de Invitación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="text-align:center;">No hay datos disponibles.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Librería externa para alertas -->
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                <!-- Archivo de scripts para manejo de eventos -->
+                <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
+
+                <!-- Script para la tarjeta y la personalización de estilos -->
+                <script>
+                    // Función para obtener los parámetros de la URL
+                    function obtenerParametrosDeURL() {
+                        const parametros = new URLSearchParams(window.location.search);
+                        const nombre = parametros.get('n') || 'La invitación no tiene nombre';
+                        const pases = parametros.get('p') || 'No tiene pases disponibles';
+                        const frase = parametros.get('f') || '';
+                        const link = parametros.get('l') || '#';
+                        const estilos = {
+                            colorH1: parametros.get('colorH1'),
+                            colorP: parametros.get('colorP'),
+                            colorA: parametros.get('colorA'),
+                            bgColor: parametros.get('bgColor'),
+                            fontFamily: parametros.get('fontFamily'),
+                        };
+                        return { nombre, pases, frase, link, estilos };
+                    }
+
+                    // Función para generar la tarjeta
+                    function generarTarjeta() {
+                        const datos = obtenerParametrosDeURL();
+                        const tarjetaHTML = `
+                            <div>
+                                <div style="text-align: center;">
+                                    <h1 data-titulo="nombre" class="nombre-t">Nombre en la Tarjeta</h1>
+                                    <p data-titulo="pases" class="pase-t"><strong>Tenés</strong><br>2 pases</p>
+                                    <p data-titulo="frase" class="pase-t"><strong>Frase de Ejemplo</strong></p>
+                                    <a href="#" class="button bt" target="_blank">Mirá el Evento</a>
+                                </div>
+                            </div>
+                        `;
+                        const contenedor = document.getElementById('tarjeta-container');
+                        contenedor.innerHTML = tarjetaHTML;
+
+                        // Aplicar estilos personalizados si están presentes en la URL
+                        aplicarEstilos(datos.estilos);
+                    }
+
+                    // Función para aplicar los estilos guardados
+                    function aplicarEstilos(estilos) {
+                        if (estilos.colorH1) document.querySelector('h1.nombre-t').style.color = estilos.colorH1;
+                        if (estilos.colorP) document.querySelectorAll('p.pase-t').forEach(p => p.style.color = estilos.colorP);
+                        if (estilos.colorA) document.querySelector('a.bt').style.color = estilos.colorA;
+                        if (estilos.bgColor) document.querySelector('div.tarjeta-container').style.backgroundColor = estilos.bgColor;
+                        if (estilos.fontFamily) document.querySelector('div.tarjeta-container').style.fontFamily = estilos.fontFamily;
+                    }
+
+                    // Función para obtener los parámetros de los estilos seleccionados
+                    function obtenerParametrosDeEstilos() {
+                        const colorH1 = document.getElementById('color-h1').value;
+                        const colorP = document.getElementById('color-p').value;
+                        const colorA = document.getElementById('color-a').value;
+                        const bgColor = document.getElementById('bg-color').value;
+                        const fontFamily = document.getElementById('font-family').value;
+
+                        const parametros = new URLSearchParams();
+                        parametros.set('colorH1', colorH1);
+                        parametros.set('colorP', colorP);
+                        parametros.set('colorA', colorA);
+                        parametros.set('bgColor', bgColor);
+                        parametros.set('fontFamily', fontFamily);
+
+                        return parametros.toString(); // Corregido a `toString()`
+                    }
+
+                    // Función para aplicar los cambios en tiempo real
+                    function aplicarCambios() {
+                        const colorH1 = document.getElementById('color-h1').value;
+                        const colorP = document.getElementById('color-p').value;
+                        const colorA = document.getElementById('color-a').value;
+                        const bgColor = document.getElementById('bg-color').value;
+                        const fontFamily = document.getElementById('font-family').value;
+
+                        document.querySelector('h1.nombre-t').style.color = colorH1;
+                        document.querySelectorAll('p.pase-t').forEach(p => p.style.color = colorP);
+                        document.querySelector('a.bt').style.color = colorA;
+                        document.querySelector('div.tarjeta-container').style.backgroundColor = bgColor;
+                        document.querySelector('div.tarjeta-container').style.fontFamily = fontFamily;
+
+                        const parametrosConFormato = obtenerParametrosDeEstilos();
+                        document.getElementById('mensaje-copiado').innerText = parametrosConFormato; // Mostrar parámetros copiados
+                        document.getElementById("mensaje-copiado").style.visibility = "hidden"; 
+                    }
+
+                    // Inicializar la página con la tarjeta y configuración
+                    window.onload = function() {
+                        generarTarjeta();
+
+                        // Escuchar los cambios en los controles del panel de configuración y aplicarlos en tiempo real
+                        document.getElementById('color-h1').addEventListener('input', aplicarCambios);
+                        document.getElementById('color-p').addEventListener('input', aplicarCambios);
+                        document.getElementById('color-a').addEventListener('input', aplicarCambios);
+                        document.getElementById('bg-color').addEventListener('input', aplicarCambios);
+                        document.getElementById('font-family').addEventListener('change', aplicarCambios);
+                    }
+                </script>
+            </body>
+        </html>
